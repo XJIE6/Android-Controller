@@ -1,0 +1,4 @@
+include ':app'
+include 'clicker'
+include 'tools'
+
