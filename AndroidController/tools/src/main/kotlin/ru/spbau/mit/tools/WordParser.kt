@@ -1,12 +1,13 @@
 package ru.spbau.mit.tools
 
-//import java.awt.Robot
+import java.awt.Robot
 
 class WordParser : Parser {
-    //val robot = Robot()
+    val robot = Robot()
 
     override fun parce(s: String): () -> Unit {
-        return {println(s)}//robot.keyPress(s[0].toInt())
-                //robot.keyRelease(s[0].toInt())}
+        return {println(s)
+                robot.keyPress(s[0].toInt())
+                robot.keyRelease(s[0].toInt())}
     }
 }

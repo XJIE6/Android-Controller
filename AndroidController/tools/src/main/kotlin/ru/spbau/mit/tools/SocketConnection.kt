@@ -5,6 +5,11 @@ import java.net.InetSocketAddress
 import java.net.Socket
 
 class SocketConnection : AppConnection {
+
+    companion object {
+        const val START_SETTINGS = -1
+    }
+
     val socket = Socket()
     lateinit var out : ObjectOutputStream
 
@@ -19,9 +24,14 @@ class SocketConnection : AppConnection {
         return socket.isConnected
     }
 
-    override fun sendSettings(settingList: Array<() -> Unit>) =
-            Thread({ObjectOutputStream(socket.getOutputStream()).writeObject(settingList)}).start()
+    override fun sendSettings(settingList: Array<String>) =
+            Thread({
+                    out.writeInt(START_SETTINGS)
+                    out.writeInt(settingList.size)
+                    settingList.forEach { out.writeUTF(it) }
+                    out.flush()}).start()
 
     override fun sendCommand(command: Int) =
-            Thread({ObjectOutputStream(socket.getOutputStream()).writeObject(command)}).start()
+            Thread({out.writeInt(command)
+                    out.flush()}).start()
 }

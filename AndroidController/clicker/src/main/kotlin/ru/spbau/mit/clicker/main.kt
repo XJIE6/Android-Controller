@@ -1,5 +1,7 @@
 package ru.spbau.mit.clicker
 
+import ru.spbau.mit.tools.SocketConnection
+import ru.spbau.mit.tools.WordParser
 import java.io.ObjectInputStream
 import java.net.ServerSocket
 
@@ -9,16 +11,22 @@ fun main(args: Array<String>) {
     val in_ = ObjectInputStream(socket.getInputStream())
     println("accepted")
     var array : Array<() -> Unit> = arrayOf()
+    val parser = WordParser()
+    var msg = in_.readInt()
     while (socket.isConnected) {
-        val msg : Any = in_.readObject()
-        if (msg is Array<*>) {
-            array = msg as Array<() -> Unit>
-        }
-        else if (msg is Int) {
-            array[msg].invoke()
+        if (msg == SocketConnection.START_SETTINGS) {
+            val n = in_.readInt()
+            array = Array(n, {i -> parser.parce(in_.readUTF())})
         }
         else {
-            TODO("unknown object")
+            if (msg >= 0 && msg < array.size) {
+                array[msg].invoke()
+            }
+            else {
+                println("error")
+            }
         }
+        msg = in_.readInt()
     }
+
 }

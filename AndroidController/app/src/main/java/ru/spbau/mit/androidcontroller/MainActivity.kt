@@ -16,13 +16,13 @@ class MainActivity : AppCompatActivity() {
         Thread({ connection.connect("")
         val layout = verticalLayout {
             val name = editText()
-            val parser = WordParser()
-//            button("Say Hello") {
-//                onClick { toast("Hello, ${name.text}!") }
-//            }
-            button("Say Hello") {
+            button("Setup") {
                 onClick {
-                    connection.sendSettings(arrayOf(parser.parce(name.text.toString())))
+                    connection.sendSettings(arrayOf(name.text.toString()))
+                }
+            }
+            button("Click") {
+                onClick {
                     connection.sendCommand(0)
                 }
             }
