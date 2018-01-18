@@ -1,41 +1,53 @@
 package ru.spbau.mit.androidcontroller
 
+import android.graphics.Color.WHITE
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
-import android.view.Gravity
-import android.view.View
-import android.widget.LinearLayout
 import org.jetbrains.anko.*
-import org.jetbrains.anko.constraint.layout.constraintLayout
-import org.jetbrains.anko.design.coordinatorLayout
 import org.jetbrains.anko.design.floatingActionButton
+import org.jetbrains.anko.design.themedAppBarLayout
+import org.jetbrains.anko.sdk25.coroutines.onItemClick
 
 class MenuActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Thread({
-            val layout = relativeLayout {
-                    verticalLayout {
-                        listView {
-//                            button("Screen1")
-//                            button("Settings")
-                        }
+        MenuActivityUI().setContentView(this)
+    }
+}
+
+class MenuActivityUI : AnkoComponent<MenuActivity> {
+    override fun createView(ui: AnkoContext<MenuActivity>) = with(ui) {
+        verticalLayout {
+            themedAppBarLayout(R.style.AppTheme_AppBarOverlay) {
+                toolbar {
+                    setTitleTextColor(WHITE)
+                    title = resources.getString(R.string.app_name)
+                    popupTheme = R.style.AppTheme_PopupOverlay
+                    lparams(width = matchParent)
+                }
+            }
+            relativeLayout {
+                val playAdapter = MenuAdapter(ui.owner)
+                listView {
+                    adapter = playAdapter
+                    isStackFromBottom = false
+                    onItemClick { _, _, i, _ ->
+                        ui.owner.startActivity(intentFor<SettingsActivity>
+                        (resources.getString(R.string.play_layout) to playAdapter.getItem(i)))
+                        // TODO: потоконебезопасно, eg другой пользователь изменить имя
+
                     }
+                }
                 floatingActionButton {
                     imageResource = android.R.drawable.ic_input_add
                 }.lparams {
-                    width = wrapContent
+                    width = matchParent
                     height = wrapContent
-                    gravity = Gravity.BOTTOM + Gravity.END
                     margin = dip(16)
+                    alignParentBottom()
+                    alignParentRight()
                 }.setOnClickListener { toast("Push!") }
             }
-            setContentView(layout)
-        }).start()
+        }
     }
-
 }
