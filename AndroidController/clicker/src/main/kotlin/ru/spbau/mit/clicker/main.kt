@@ -16,8 +16,6 @@ fun getAddress(): String {
 
 fun main(args: Array<String>) {
 
-    println(getAddress())
-
     val server = IPServer({object : Handler {
         var array : Array<() -> Unit> = arrayOf()
         val parser = WordParser()
@@ -28,7 +26,6 @@ fun main(args: Array<String>) {
 
         override fun onClick(cmd: Int) {
             println("clicked")
-            println(cmd)
             if (array.size > cmd) {
                 array[cmd]()
             }
@@ -40,6 +37,6 @@ fun main(args: Array<String>) {
         override fun onClose() {
         }
     }})
-    println(server.getPort())
+    println(getAddress() + ':' + server.getPort())
     server.start()
 }

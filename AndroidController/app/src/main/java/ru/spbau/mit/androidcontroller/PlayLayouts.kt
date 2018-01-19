@@ -49,8 +49,8 @@ object PlayLayouts {
     }
 
     var commands: Map<String, PlayLayout> = hashMapOf(
-            Pair("Screen1", PlayLayout("Screen1", arrayOf("A"))),
-            Pair("Screen2", PlayLayout("Screen2", arrayOf("B", "C")))
+            Pair("Screen1", PlayLayout("Screen1", arrayOf("H+e+l+o+\\left+l+\\right"))),
+            Pair("Screen2", PlayLayout("Screen2", arrayOf("f+t\\left+\\left+\\left+L+e+\\right+\\right", "R+R+R+r+r+r")))
     )
 
     private var layouts: Map<String, (ViewManager.() -> LinearLayout)> = hashMapOf(
