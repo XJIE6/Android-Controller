@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">AndroidController</string>
-    <string name="hint_text">enter the command from computer</string>
+    <string name="hint_text">Enter the IP:port from PC</string>
     <string name="connect_button">Connect</string>
     <string name="title_activity_menu">MenuActivity</string>
     <string name="play_layout">playLayout</string>

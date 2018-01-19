@@ -6,11 +6,12 @@ import java.net.Socket
 import java.net.SocketTimeoutException
 
 class IPServer(val factory: () -> Handler) {
-    val server = ServerSocket(12345)
+    val server = ServerSocket(0)
     var isOpen = true
-
+    fun getPort() : Int{
+        return server.localPort
+    }
     fun start() {
-
         Thread({
             server.soTimeout = 100000 // Timeout for accepting
             while (isOpen) {
@@ -35,7 +36,7 @@ class IPServer(val factory: () -> Handler) {
     }
 }
 
-class IPConnection(socket : Socket, val handler : Handler) {
+class IPConnection(val socket : Socket, val handler : Handler) {
     val input = DataInputStream(socket.getInputStream())
     fun start() {
         var msg = input.readInt()
@@ -50,5 +51,6 @@ class IPConnection(socket : Socket, val handler : Handler) {
             msg = input.readInt()
         }
         handler.onClose()
+        socket.close()
     }
 }

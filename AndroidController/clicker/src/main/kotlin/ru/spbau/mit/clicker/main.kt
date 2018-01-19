@@ -3,9 +3,22 @@ package ru.spbau.mit.clicker
 import ru.spbau.mit.tools.Handler
 import ru.spbau.mit.tools.IPServer
 import ru.spbau.mit.tools.WordParser
+import java.net.NetworkInterface
+
+fun getAddress(): String {
+    return NetworkInterface.getNetworkInterfaces().toList()
+            .flatMap { it.inetAddresses.toList()
+                    .filter { it.address.size == 4 }
+                    .filter { !it.isLoopbackAddress }
+                    .filter { it.address[0] != 10.toByte() }
+                    .map { it.hostAddress }
+            }.first() }
 
 fun main(args: Array<String>) {
-    IPServer({object : Handler {
+
+    println(getAddress())
+
+    val server = IPServer({object : Handler {
         var array : Array<() -> Unit> = arrayOf()
         val parser = WordParser()
         override fun onSetting(arr: Array<String>) {
@@ -26,24 +39,7 @@ fun main(args: Array<String>) {
 
         override fun onClose() {
         }
-    }}).start()
-//    var array : Array<() -> Unit> = arrayOf()
-//    val parser = WordParser()
-//    var msg = in_.readInt()
-//    while (socket.isConnected) {
-//        if (msg == SocketConnection.START_SETTINGS) {
-//            val n = in_.readInt()
-//            array = Array(n, {i -> parser.parce(in_.readUTF())})
-//        }
-//        else {
-//            if (msg >= 0 && msg < array.size) {
-//                array[msg].invoke()
-//            }
-//            else {
-//                println("error")
-//            }
-//        }
-//        msg = in_.readInt()
-//    }
-
+    }})
+    println(server.getPort())
+    server.start()
 }

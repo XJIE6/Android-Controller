@@ -3,7 +3,7 @@ package ru.spbau.mit.tools
 import java.awt.Robot
 
 class WordParser : Parser {
-    val robot = Robot()
+    private val robot = Robot()
 
     override fun parce(s: String): () -> Unit {
         return {println(s)

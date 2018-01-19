@@ -7,7 +7,6 @@ import java.net.Socket
 
 class SocketConnection : AppConnection {
 
-
     companion object {
         const val START_SETTINGS = -1
         const val END_CONNECTION = -2
@@ -16,15 +15,16 @@ class SocketConnection : AppConnection {
     val socket = Socket()
     lateinit var out : DataOutputStream
 
-    override fun connect(params: String): Boolean {
+    override fun connect(params: String) {
+        Thread({
         try {
-            socket.connect(InetSocketAddress("10.0.2.2", 12345))
+            val ipPort = params.split(":")
+            socket.connect(InetSocketAddress(ipPort[0], ipPort[1].toInt()))
             out = DataOutputStream(socket.getOutputStream())
         }
         catch (e: Throwable) {
             println(e.message)
-        }
-        return socket.isConnected
+        }}).start()
     }
 
     override fun sendSettings(settingList: Array<String>) =
@@ -41,6 +41,10 @@ class SocketConnection : AppConnection {
 
     override fun close() =
             Thread({
-                out.writeInt(END_CONNECTION)
-                out.flush()}).start()
+                if (socket.isConnected) {
+                    out.writeInt(END_CONNECTION)
+                    out.flush()
+                }
+                //socket.close()
+            }).start()
 }

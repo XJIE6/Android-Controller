@@ -9,34 +9,27 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
+import ru.spbau.mit.tools.SocketConnection
 
 class MainActivity : AppCompatActivity() {
 
-//    val connection = SocketConnection()
-
+    companion object {
+        val connection = SocketConnection()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//                    connection.connect("")
-//                    val layout = verticalLayout {
-//                        val name = editText()
-//                        button("Setup") {
-//                            onClick {
-////                                connection.sendSettings(arrayOf(name.text.toString()))
-//                            }
-//                        }
-//                        button("Click") {
-//                            onClick {
-//                                //                    connection.sendCommand(0)
-//                            }
-//                        }
-//                    }
-
         MainActivityUI().setContentView(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        connection.close()
     }
 }
 
 class MainActivityUI: AnkoComponent<MainActivity> {
+
     private fun goToMenu(activity: MainActivity) {
         activity.startActivity<MenuActivity>()
     }
@@ -78,6 +71,7 @@ class MainActivityUI: AnkoComponent<MainActivity> {
 
                     onClick {
                         toast("Click!")
+                        MainActivity.connection.connect(code.text.toString())
                         goToMenu(ui.owner)
                     }
                 }.lparams(width=matchParent, height=dip(60))
