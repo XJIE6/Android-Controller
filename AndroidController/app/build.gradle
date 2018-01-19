@@ -36,11 +36,11 @@ android {
     }
 }
 
-ext.anko_version='0.10.4'
-ext.dagger_version='2.0'
-ext.butterknife_version='8.8.1'
-ext.android_plugin_version='2.3.3'
-ext.dbflow_version='4.2.0'
+ext.anko_version = '0.10.4'
+ext.dagger_version = '2.0'
+ext.butterknife_version = '8.8.1'
+ext.android_plugin_version = '2.3.3'
+ext.dbflow_version = '4.2.0'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -49,9 +49,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     compile "com.jakewharton:butterknife:$butterknife_version"
@@ -60,7 +57,14 @@ dependencies {
     kapt "com.github.raizlabs.dbflow:dbflow-processor:$dbflow_version"
     compile "com.github.raizlabs.dbflow:dbflow-core:$dbflow_version"
     compile "com.github.raizlabs.dbflow:dbflow:$dbflow_version"
+    compile "org.jetbrains.anko:anko-constraint-layout:$anko_version"
+    compile "org.jetbrains.anko:anko-design:$anko_version"
+
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support:design:27.+'
+    testCompile 'junit:junit:4.12'
 }
 repositories {
     mavenCentral()

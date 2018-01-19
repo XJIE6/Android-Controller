@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">AndroidController</string>
+    <string name="hint_text">enter the command from computer</string>
+    <string name="connect_button">Connect</string>
+    <string name="title_activity_menu">MenuActivity</string>
+    <string name="play_layout">playLayout</string>
+    <string name="settings_mode">settings mode</string>
+    <string name="play_mode">play mode</string>
 </resources>
