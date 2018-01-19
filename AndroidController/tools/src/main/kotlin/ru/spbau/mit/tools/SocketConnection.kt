@@ -1,22 +1,25 @@
 package ru.spbau.mit.tools
 
-import java.io.ObjectOutputStream
+
+import java.io.DataOutputStream
 import java.net.InetSocketAddress
 import java.net.Socket
 
 class SocketConnection : AppConnection {
 
+
     companion object {
         const val START_SETTINGS = -1
+        const val END_CONNECTION = -2
     }
 
     val socket = Socket()
-    lateinit var out : ObjectOutputStream
+    lateinit var out : DataOutputStream
 
     override fun connect(params: String): Boolean {
         try {
             socket.connect(InetSocketAddress("10.0.2.2", 12345))
-            out = ObjectOutputStream(socket.getOutputStream())
+            out = DataOutputStream(socket.getOutputStream())
         }
         catch (e: Throwable) {
             println(e.message)
@@ -32,6 +35,12 @@ class SocketConnection : AppConnection {
                     out.flush()}).start()
 
     override fun sendCommand(command: Int) =
-            Thread({out.writeInt(command)
-                    out.flush()}).start()
+            Thread({
+                out.writeInt(command)
+                out.flush()}).start()
+
+    override fun close() =
+            Thread({
+                out.writeInt(END_CONNECTION)
+                out.flush()}).start()
 }

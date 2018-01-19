@@ -10,7 +10,6 @@ import android.view.inputmethod.InputMethodManager
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 
-
 class MainActivity : AppCompatActivity() {
 
 //    val connection = SocketConnection()
@@ -74,8 +73,6 @@ class MainActivityUI: AnkoComponent<MainActivity> {
                     }
                     handled
                 }
-
-
                 button() {
                     textResource = R.string.connect_button
 
