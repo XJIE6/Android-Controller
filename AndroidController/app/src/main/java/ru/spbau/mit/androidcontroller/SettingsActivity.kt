@@ -21,17 +21,19 @@ class SettingsActivityUI: AnkoComponent<SettingsActivity> {
         val customize = PlayLayouts.getLayout(playLayoutName)
         if (customize != null) {
             verticalLayout {
-                customize()
-                button("Play")
-                        .lparams {
-                            width = matchParent
-                            height = wrapContent
-                            gravity = Gravity.BOTTOM
-                        }
-                        .onClick {
-                            toast("Play!")
-                            startActivity<PlayActivity>(resources.getString(R.string.play_layout) to playLayoutName)
-                        }
+                customize().lparams(width = matchParent, height = matchParent, weight = 1f)
+                linearLayout {
+                    button("Play")
+                            .lparams {
+                                width = matchParent
+                                height = wrapContent
+                                this.gravity = Gravity.BOTTOM
+                            }
+                            .onClick {
+                                toast("Play!")
+                                startActivity<PlayActivity>(resources.getString(R.string.play_layout) to playLayoutName)
+                            }
+                }.lparams(width = matchParent, height = wrapContent)
             }
         } else {
 //            TODO: Exception
