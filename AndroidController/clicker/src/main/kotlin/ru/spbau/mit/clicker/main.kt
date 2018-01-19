@@ -1,32 +1,42 @@
 package ru.spbau.mit.clicker
 
-import ru.spbau.mit.tools.SocketConnection
+import ru.spbau.mit.tools.Handler
+import ru.spbau.mit.tools.IPServer
 import ru.spbau.mit.tools.WordParser
-import java.io.ObjectInputStream
-import java.net.ServerSocket
+import java.net.NetworkInterface
+
+fun getAddress(): String {
+    return NetworkInterface.getNetworkInterfaces().toList()
+            .flatMap { it.inetAddresses.toList()
+                    .filter { it.address.size == 4 }
+                    .filter { !it.isLoopbackAddress }
+                    .filter { it.address[0] != 10.toByte() }
+                    .map { it.hostAddress }
+            }.first() }
 
 fun main(args: Array<String>) {
-    println("waiting for accepting")
-    val socket = ServerSocket(12345).accept()
-    val in_ = ObjectInputStream(socket.getInputStream())
-    println("accepted")
-    var array : Array<() -> Unit> = arrayOf()
-    val parser = WordParser()
-    var msg = in_.readInt()
-    while (socket.isConnected) {
-        if (msg == SocketConnection.START_SETTINGS) {
-            val n = in_.readInt()
-            array = Array(n, {i -> parser.parce(in_.readUTF())})
+
+    val server = IPServer({object : Handler {
+        var array : Array<() -> Unit> = arrayOf()
+        val parser = WordParser()
+        override fun onSetting(arr: Array<String>) {
+            println("setted")
+            array = arr.map { it -> parser.parce(it) }.toTypedArray()
         }
-        else {
-            if (msg >= 0 && msg < array.size) {
-                array[msg].invoke()
+
+        override fun onClick(cmd: Int) {
+            println("clicked")
+            if (array.size > cmd) {
+                array[cmd]()
             }
             else {
-                println("error")
+                println("wrong msg")
             }
         }
-        msg = in_.readInt()
-    }
 
+        override fun onClose() {
+        }
+    }})
+    println(getAddress() + ':' + server.getPort())
+    server.start()
 }
