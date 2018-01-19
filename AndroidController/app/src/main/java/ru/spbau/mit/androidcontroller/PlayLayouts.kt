@@ -55,9 +55,12 @@ object PlayLayouts {
     private var layouts: Map<String, (ViewManager.() -> LinearLayout)> = hashMapOf(
             Pair("Screen1", fun ViewManager.() = linearLayout {
                     val b1 = button("Push") {
+                        width = matchParent
+                        height = matchParent
                         background = buttonBg(context)
                         id = 0
                     }.lparams {
+                        weight = 1f
                         margin = dip(10)
                     }
                     addChangeDialog(b1, context, "Screen1")
@@ -69,12 +72,18 @@ object PlayLayouts {
                         width = matchParent
                         height = matchParent
                         id = 1
+                    }.lparams {
+                        margin = dip(10)
+                        weight = 1f
                     }, context, "Screen2")
                     addChangeDialog(button("Right") {
                         background = buttonBg(context)
                         width = matchParent
                         height = matchParent
                         id = 2
+                    }.lparams {
+                        margin = dip(10)
+                        weight = 1f
                     }, context, "Screen2")
 
                 }
