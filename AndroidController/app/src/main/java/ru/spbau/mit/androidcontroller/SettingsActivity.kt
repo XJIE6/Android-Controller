@@ -37,7 +37,6 @@ class SettingsActivityUI: AnkoComponent<SettingsActivity> {
                 }.lparams(width = matchParent, height = wrapContent)
             }
         } else {
-//            TODO: Exception
             throw ExceptionInInitializerError("Couldn't find screen with the name $playLayoutName")
         }
     }

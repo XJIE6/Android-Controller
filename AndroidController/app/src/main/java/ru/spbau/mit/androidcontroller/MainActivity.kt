@@ -35,12 +35,8 @@ class MainActivityUI: AnkoComponent<MainActivity> {
     }
 
     private fun hideKeyboard(activity: MainActivity) {
-        try {
-            val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(activity.currentFocus!!.windowToken, 0)
-        } catch (e: Exception) {
-            // TODO: handle exception
-        }
+        val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(activity.currentFocus!!.windowToken, 0)
     }
 
     override fun createView(ui: AnkoContext<MainActivity>) = with(ui) {

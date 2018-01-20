@@ -20,7 +20,6 @@ class PlayActivityUI: AnkoComponent<PlayActivity> {
         if (customize != null) {
             customize()
         } else {
-//            TODO: Exception
             throw ExceptionInInitializerError("Couldn't find screen with the name $playLayoutName")
         }
     }
