@@ -2,7 +2,7 @@ package ru.spbau.mit.clicker
 
 import ru.spbau.mit.tools.Handler
 import ru.spbau.mit.tools.IPServer
-import ru.spbau.mit.tools.WordParser
+import ru.spbau.mit.tools.KeyParser
 import java.net.NetworkInterface
 
 fun getAddress(): String {
@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
 
     val server = IPServer({object : Handler {
         var array : Array<() -> Unit> = arrayOf()
-        val parser = WordParser()
+        val parser = KeyParser()
         override fun onSetting(arr: Array<String>) {
             println("setted")
             array = arr.map { it -> parser.parce(it) }.toTypedArray()
