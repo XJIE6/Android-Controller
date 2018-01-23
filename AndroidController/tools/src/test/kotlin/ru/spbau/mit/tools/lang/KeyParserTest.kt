@@ -1,15 +1,14 @@
-package ru.spbau.mit.tools
+package ru.spbau.mit.tools.lang
 
-import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import org.junit.Test
 import kotlin.test.assertEquals
 
 class KeyParserTest {
     private val parser = KeyParser()
     @Test
-    fun getGrammar() {
-        assertEquals(parser.grammar.parseToEnd("k49"), Key(49))
-        assertEquals(parser.grammar.parseToEnd("[k50 [p61 k49 r61] 7 k77] 11"),
+    fun basicGrammarTest() {
+        assertEquals(parser.parse("49"), Repeat(1, listOf(Key(49))))
+        assertEquals(parser.parse("[50 [+61 49 -61] 7 77] 11"),
                 Repeat(11, listOf(
                         Key(50),
                         Repeat(7, listOf(
@@ -19,7 +18,7 @@ class KeyParserTest {
                         )),
                         Key(77)
                 )))
-        assertEquals(parser.grammar.parseToEnd("[k50[  p61   k49    r61     ]7   k77  ]   11"),
+        assertEquals(parser.parse("[50[  +61   49    -61     ]7   77  ]   11"),
                 Repeat(11, listOf(
                         Key(50),
                         Repeat(7, listOf(
@@ -29,5 +28,17 @@ class KeyParserTest {
                         )),
                         Key(77)
                 )))
+    }
+    @Test
+    fun syntaxSugarTest() {
+        assertEquals(parser.parse("k"), Repeat(1, listOf(Key(75))))
+        assertEquals(parser.parse("+S h -S e l l o"), Repeat(1, listOf(
+                Press(16),
+                Key(72),
+                Release(16),
+                Key(69),
+                Key(76),
+                Key(76),
+                Key(79))))
     }
 }

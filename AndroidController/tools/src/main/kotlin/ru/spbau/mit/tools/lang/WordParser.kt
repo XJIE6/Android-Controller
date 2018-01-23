@@ -1,12 +1,12 @@
-package ru.spbau.mit.tools
+package ru.spbau.mit.tools.lang
 
 import java.awt.Robot
 import java.awt.event.KeyEvent.*
 
-class WordParser : Parser {
+class WordParser {
     private val robot = Robot()
 
-    override fun parce(s: String): () -> Unit {
+    fun parse(s: String): () -> Unit {
         return {s.split('+').map {
             when (it) {
                 "\\right" -> VK_RIGHT
