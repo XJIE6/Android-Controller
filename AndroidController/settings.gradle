@@ -1,4 +1,4 @@
 include ':app'
-include 'clicker'
-include 'tools'
+include ':clicker'
+include ':tools'
 
