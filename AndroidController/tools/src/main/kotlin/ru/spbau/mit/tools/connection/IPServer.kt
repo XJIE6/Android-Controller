@@ -1,4 +1,4 @@
-package ru.spbau.mit.tools
+package ru.spbau.mit.tools.connection
 
 import java.io.DataInputStream
 import java.net.ServerSocket
@@ -18,7 +18,7 @@ class IPServer(val factory: () -> Handler) {
                 try {
                     println("accepting")
                     val connection = server.accept()
-                    Thread( {
+                    Thread({
                         println("accepted")
                         IPConnection(connection, factory.invoke()).start()
                     }).start()

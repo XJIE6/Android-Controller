@@ -1,4 +1,4 @@
-package ru.spbau.mit.tools
+package ru.spbau.mit.tools.connection
 
 
 import java.io.DataOutputStream
