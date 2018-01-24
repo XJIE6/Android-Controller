@@ -11,20 +11,28 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import ru.spbau.mit.tools.SocketConnection
 
-class MainActivity : AppCompatActivity() {
 
+class MainActivity : AppCompatActivity() {
     companion object {
         val connection = SocketConnection()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ScreenStorage.loadData(this)
         MainActivityUI().setContentView(this)
     }
 
     override fun onResume() {
         super.onResume()
         connection.close()
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        ScreenStorage.saveData(this)
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
     }
 }
 
@@ -74,5 +82,4 @@ class MainActivityUI: AnkoComponent<MainActivity> {
             }.lparams(width=wrapContent)
         }
     }
-
 }

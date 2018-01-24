@@ -15,12 +15,8 @@ class PlayActivity : AppCompatActivity() {
 
 class PlayActivityUI: AnkoComponent<PlayActivity> {
     override fun createView(ui: AnkoContext<PlayActivity>): LinearLayout = with(ui) {
-        val playLayoutName = ui.owner.intent.extras.getCharSequence(resources.getString(R.string.play_layout)).toString()
-        val customize = PlayLayouts.getLayout(playLayoutName)
-        if (customize != null) {
-            customize()
-        } else {
-            throw ExceptionInInitializerError("Couldn't find screen with the name $playLayoutName")
-        }
+        val playLayoutPos = ui.owner.intent.extras.getInt(resources.getString(R.string.play_layout))
+        val customize = ScreenStorage.screens[playLayoutPos].buildScreenPlay(ui.owner)
+        customize()
     }
 }
