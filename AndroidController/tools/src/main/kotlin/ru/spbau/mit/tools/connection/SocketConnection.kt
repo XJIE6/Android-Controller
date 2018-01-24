@@ -48,7 +48,6 @@ class SocketConnection : AppConnection {
                 out.writeInt(Protocol.END_CONNECTION)
                 out.flush()
             }
-            socket.close()
         }
         thread.join()
     }
