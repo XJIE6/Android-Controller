@@ -30,9 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-
         ScreenStorage.saveData(this)
-        val sharedPref = getPreferences(Context.MODE_PRIVATE)
     }
 }
 

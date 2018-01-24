@@ -11,16 +11,9 @@ class SocketConnection : AppConnection {
     private lateinit var out : DataOutputStream
 
     override fun connect(params: String) {
-
-        println("123456")
         Thread({
         try {
-
-            println("1239999")
-            println(params)
             val ipPort = params.split(":")
-            println(ipPort)
-            println("1239999")
             socket.connect(InetSocketAddress(ipPort[0], ipPort[1].toInt()))
             out = DataOutputStream(socket.getOutputStream())
         }

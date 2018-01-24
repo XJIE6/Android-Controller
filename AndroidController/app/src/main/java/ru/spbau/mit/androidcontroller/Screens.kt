@@ -36,7 +36,7 @@ class Screen(@SerializedName("name") val name: String, @SerializedName("playLayo
         return Array(commands.size, { num: Int ->
             { view: View ->
                 ctx.toast(commands[num]).show()
-//                MainActivity.connection.sendCommand(num)
+                MainActivity.connection.sendCommand(num)
             }
         })
     }
