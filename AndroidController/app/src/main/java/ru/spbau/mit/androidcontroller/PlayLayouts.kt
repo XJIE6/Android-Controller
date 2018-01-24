@@ -33,6 +33,7 @@ object PlayLayoutOneButton: PlayLayout {
 
     override fun build(context: Context, lambdas: Array<(View) -> Unit>): ViewManager.() -> LinearLayout =
         fun ViewManager.() = linearLayout {
+            id = R.id.layout_one_button
             var elementId = 0
                 val b1 = button("Push") {
                     background = buttonStyle(context)
@@ -52,6 +53,7 @@ object PlayLayoutLeftRight: PlayLayout {
 
     override fun build(context: Context, lambdas: Array<(View) -> Unit>): ViewManager.() -> LinearLayout =
             fun ViewManager.() = linearLayout {
+                id = R.id.layout_left_right
                 var elementId = 0
                 val b1 = button("Left") {
                     background = buttonStyle(context)

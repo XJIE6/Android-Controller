@@ -24,6 +24,7 @@ class SettingsActivityUI: AnkoComponent<SettingsActivity> {
             linearLayout {
                 button("Play")
                         .lparams {
+                            id = R.id.play_button
                             width = matchParent
                             height = wrapContent
                             this.gravity = Gravity.BOTTOM

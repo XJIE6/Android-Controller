@@ -10,6 +10,10 @@ androidExtensions {
 
 kotlin { experimental { coroutines 'enable' } }
 
+kapt {
+    generateStubs = true
+}
+
 android {
     compileSdkVersion 27
     buildToolsVersion "27.0.3"
@@ -25,6 +29,7 @@ android {
     dataBinding {
         enabled = true
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -36,11 +41,16 @@ android {
     }
 }
 
-ext.anko_version = '0.10.4'
-ext.dagger_version = '2.0'
-ext.butterknife_version = '8.8.1'
-ext.android_plugin_version = '2.3.3'
-ext.dbflow_version = '4.2.0'
+ext {
+    anko_version = '0.10.4'
+    dagger_version = '2.0'
+    butterknife_version = '8.8.1'
+    android_plugin_version = '2.3.3'
+    dbflow_version = '4.2.0'
+    support_version = '27.0.2'
+    testrunner_version = '1.0.1'
+    espresso_version = '3.0.1'
+}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -67,6 +77,11 @@ dependencies {
 
     compile 'com.google.code.gson:gson:2.6.2'
     testCompile 'junit:junit:4.12'
+    androidTestCompile "com.android.support:support-annotations:$support_version"
+    androidTestCompile "com.android.support.test:runner:$testrunner_version"
+    androidTestCompile "com.android.support.test:rules:$testrunner_version"
+    androidTestCompile "com.android.support.test.espresso:espresso-core:$espresso_version"
+    androidTestCompile "com.android.support.test.espresso:espresso-intents:$espresso_version"
 }
 repositories {
     mavenCentral()

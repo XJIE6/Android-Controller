@@ -19,13 +19,14 @@ class Screen(@SerializedName("name") val name: String, @SerializedName("playLayo
         return Array(commands.size, { num: Int ->
             { view: View ->
                 val editChange = EditText(ctx)
+                editChange.id = R.id.change_command
                 editChange.setText(commands[num])
                 AlertDialog
                         .Builder(ctx)
                         .setTitle("Change command")
                         .setMessage("Enter the command of the button ${view.findViewById<Button>(num).text}")
                         .setView(editChange)
-                        .setNeutralButton("Ok", { _, _ ->
+                        .setNeutralButton(R.string.ok, { _, _ ->
                             commands.set(num, editChange.text.toString())
                         }).create().show()
             }
