@@ -28,7 +28,7 @@ fun main(args: Array<String>) {
                     robot.keyRelease(cmd.id)}
                 is Press -> robot.keyPress(cmd.id)
                 is Release -> robot.keyRelease(cmd.id)
-                is Repeat -> repeat(cmd.count, { _ -> cmd.cmds.forEach({ it -> eval(it)})})
+                is Repeat -> repeat(cmd.count, {cmd.cmds.forEach({ it -> eval(it)})})
             }
 
             override fun onSetting(arr: Array<String>) {

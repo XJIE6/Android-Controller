@@ -17,6 +17,8 @@ class IPServer(val factory: () -> Handler) {
             while (isOpen) {
                 try {
                     println("accepting")
+                    println(server.localPort)
+
                     val connection = server.accept()
                     Thread({
                         println("accepted")
@@ -40,8 +42,8 @@ class IPConnection(val socket : Socket, val handler : Handler) {
     val input = DataInputStream(socket.getInputStream())
     fun start() {
         var msg = input.readInt()
-        while(msg != SocketConnection.END_CONNECTION) {
-            if (msg == SocketConnection.START_SETTINGS) {
+        while(msg != Protocol.END_CONNECTION) {
+            if (msg == Protocol.START_SETTINGS) {
                 val n = input.readInt()
                 handler.onSetting(Array(n, {i -> input.readUTF()}))
             }
