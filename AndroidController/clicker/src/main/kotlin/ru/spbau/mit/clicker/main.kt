@@ -32,16 +32,12 @@ fun main(args: Array<String>) {
             }
 
             override fun onSetting(arr: Array<String>) {
-                println("setted")
                 array = arr.map { it -> {eval(parser.parse(it))} }.toTypedArray()
             }
 
             override fun onClick(cmd: Int) {
-                println("clicked")
                 if (array.size > cmd) {
                     array[cmd]()
-                } else {
-                    println("wrong msg")
                 }
             }
 
@@ -51,4 +47,6 @@ fun main(args: Array<String>) {
     })
     println(getAddress() + ':' + server.getPort())
     server.start()
+    readLine()
+    server.stop()
 }

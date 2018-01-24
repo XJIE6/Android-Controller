@@ -12,18 +12,18 @@ data class Settings(val arr : Array<String>) : Command()
 data class Click(val key : Int) : Command()
 class Close : Command()
 
-class TestHandler(val cmds : Array<Command>) : Handler{
+class TestHandler(val cmds : Array<Command>) : Handler {
     private var index = 0
     fun check() {
         assertEquals(index, cmds.size)
     }
-    override fun onSetting(arr: Array<String>) {
+    override fun onSetting(arr : Array<String>) {
         val cur = cmds[index] as Settings
         assertArrayEquals(arr, cur.arr)
         index++
     }
 
-    override fun onClick(cmd: Int) {
+    override fun onClick(cmd : Int) {
         val cur = cmds[index] as Click
         assertEquals(cmd, cur.key)
         index++
@@ -60,7 +60,7 @@ class ProtocolTest {
             assertTrue(client.connect("localhost" + ':' + server.getPort()))
             client
         })
-        val threads = Array(cmds.size, {index -> thread{
+        val threads = Array(cmds.size, {index -> thread {
             val client = connections[index]
             cmds[index].forEach { when (it) {
                 is Settings -> client.sendSettings(it.arr)

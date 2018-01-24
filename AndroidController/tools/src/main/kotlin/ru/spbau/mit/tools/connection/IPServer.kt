@@ -6,7 +6,7 @@ import java.net.Socket
 import java.net.SocketTimeoutException
 import kotlin.concurrent.thread
 
-class IPServer(val factory: () -> Handler) {
+class IPServer(private val factory : () -> Handler) {
     private val server = ServerSocket(0)
     private var isOpen = true
 
@@ -15,20 +15,17 @@ class IPServer(val factory: () -> Handler) {
     }
 
     fun start() {
-        thread {
+        thread (isDaemon = true) {
             server.soTimeout = 100000 // Timeout for accepting
             while (isOpen) {
                 try {
-                    println("accepting")
-                    println(server.localPort)
                     val connection = server.accept()
-                    Thread({
-                        println("accepted")
+                    thread (isDaemon = true) {
+                        println("connected")
                         IPConnection(connection, factory.invoke()).start()
-                    }).start()
+                    }
                 }
                 catch (e : SocketTimeoutException) {
-                    println("timeout")
                     continue
                 }
 
@@ -47,17 +44,22 @@ class IPConnection(private val socket : Socket, private val handler : Handler) {
 
     fun start() {
         var msg = input.readInt()
-        while(msg != Protocol.END_CONNECTION) {
-            if (msg == Protocol.START_SETTINGS) {
-                val n = input.readInt()
-                handler.onSetting(Array(n, {_ -> input.readUTF()}))
+        try {
+            while (msg != Protocol.END_CONNECTION) {
+                if (msg == Protocol.START_SETTINGS) {
+                    val n = input.readInt()
+                    handler.onSetting(Array(n, { _ -> input.readUTF() }))
+                } else {
+                    handler.onClick(msg)
+                }
+                msg = input.readInt()
             }
-            else {
-                handler.onClick(msg)
-            }
-            msg = input.readInt()
+        }
+        catch (e : Exception) {
         }
         handler.onClose()
-        socket.close()
+        if (!socket.isClosed) {
+            socket.close()
+        }
     }
 }
