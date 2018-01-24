@@ -6,7 +6,7 @@ import ru.spbau.mit.tools.lang.*
 import java.awt.Robot
 import java.net.NetworkInterface
 
-fun getAddress(): String {
+fun getAddress() : String {
     return NetworkInterface.getNetworkInterfaces().toList()
             .flatMap { it.inetAddresses.toList()
                     .filter { it.address.size == 4 }
@@ -28,7 +28,7 @@ fun main(args: Array<String>) {
                     robot.keyRelease(cmd.id)}
                 is Press -> robot.keyPress(cmd.id)
                 is Release -> robot.keyRelease(cmd.id)
-                is Repeat -> repeat(cmd.count, {cmd.cmds.forEach({ it -> eval(it)})})
+                is Repeat -> repeat(cmd.count, {cmd.cmds.forEach({eval(it)})})
             }
 
             override fun onSetting(arr: Array<String>) {

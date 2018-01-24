@@ -9,15 +9,24 @@ import com.github.h0tk3y.betterParse.parser.Parser
 class KeyParser {
 
     private val grammar = object : Grammar<Cmd>() {
+
         private val press by token("\\+")
+
         private val release by token("-")
+
         private val number by token("\\d+")
+
         private val space by token("\\s+", ignore = true)
+
         private val lbracket by token("\\[")
+
         private val rbracket by token("]")
+
         private val sugar by token("\\S")
+
         private val repeat by (-lbracket * oneOrMore(parser(this::command)) * -rbracket * number map
                 {(list, count) -> Repeat(count.text.toInt(), list) })
+
         private val command : Parser<Cmd> by
             (number use { Key(text.toInt()) }) or
             (-press * (
@@ -30,6 +39,7 @@ class KeyParser {
                     )) or
             repeat or
             (sugar use { Key(charToCode(text[0])) })
+
         override val rootParser by repeat or ((oneOrMore(parser(this::command)) map {Repeat(1, it)}))
 
     }
@@ -53,7 +63,7 @@ class KeyParser {
         'W' -> 524 //Windows
         else -> 0
     }
-    fun parse(s: String): Cmd {
+    fun parse(s : String) : Cmd {
         return grammar.parseToEnd(s)
     }
 }
