@@ -9,7 +9,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
-import ru.spbau.mit.tools.SocketConnection
+import ru.spbau.mit.tools.connection.SocketConnection
 
 
 class MainActivity : AppCompatActivity() {

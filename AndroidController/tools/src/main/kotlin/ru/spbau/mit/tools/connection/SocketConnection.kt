@@ -1,4 +1,4 @@
-package ru.spbau.mit.tools
+package ru.spbau.mit.tools.connection
 
 
 import java.io.DataOutputStream
@@ -7,18 +7,20 @@ import java.net.Socket
 
 class SocketConnection : AppConnection {
 
-    companion object {
-        const val START_SETTINGS = -1
-        const val END_CONNECTION = -2
-    }
-
-    val socket = Socket()
-    lateinit var out : DataOutputStream
+    private val socket = Socket()
+    private lateinit var out : DataOutputStream
 
     override fun connect(params: String) {
+
+        println("123456")
         Thread({
         try {
+
+            println("1239999")
+            println(params)
             val ipPort = params.split(":")
+            println(ipPort)
+            println("1239999")
             socket.connect(InetSocketAddress(ipPort[0], ipPort[1].toInt()))
             out = DataOutputStream(socket.getOutputStream())
         }
@@ -29,7 +31,7 @@ class SocketConnection : AppConnection {
 
     override fun sendSettings(settingList: Array<String>) =
             Thread({
-                    out.writeInt(START_SETTINGS)
+                    out.writeInt(Protocol.START_SETTINGS)
                     out.writeInt(settingList.size)
                     settingList.forEach { out.writeUTF(it) }
                     out.flush()}).start()
@@ -42,7 +44,7 @@ class SocketConnection : AppConnection {
     override fun close() =
             Thread({
                 if (socket.isConnected) {
-                    out.writeInt(END_CONNECTION)
+                    out.writeInt(Protocol.END_CONNECTION)
                     out.flush()
                 }
                 //socket.close()

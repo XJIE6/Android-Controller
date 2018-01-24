@@ -1,4 +1,4 @@
-package ru.spbau.mit.tools
+package ru.spbau.mit.tools.connection
 
 interface AppConnection {
     fun connect(params : String)
