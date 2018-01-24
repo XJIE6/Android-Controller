@@ -17,27 +17,23 @@ class SettingsActivity : AppCompatActivity(), AnkoLogger {
 
 class SettingsActivityUI: AnkoComponent<SettingsActivity> {
     override fun createView(ui: AnkoContext<SettingsActivity>) : View = with(ui) {
-        val playLayoutName = ui.owner.intent.extras.getCharSequence(resources.getString(R.string.play_layout)).toString()
-        val customize = PlayLayouts.getLayout(playLayoutName)
-        if (customize != null) {
-            verticalLayout {
-                customize().lparams(width = matchParent, height = matchParent, weight = 1f)
-                linearLayout {
-                    button("Play")
-                            .lparams {
-                                width = matchParent
-                                height = wrapContent
-                                this.gravity = Gravity.BOTTOM
-                            }
-                            .onClick {
-                                toast("Play!")
-                                MainActivity.connection.sendSettings(PlayLayouts.commands[playLayoutName]!!.commands) // TODO: strict cast
-                                startActivity<PlayActivity>(resources.getString(R.string.play_layout) to playLayoutName)
-                            }
-                }.lparams(width = matchParent, height = wrapContent)
-            }
-        } else {
-            throw ExceptionInInitializerError("Couldn't find screen with the name $playLayoutName")
+        val playLayoutPos = ui.owner.intent.extras.getInt(resources.getString(R.string.play_layout))
+        val customize = ScreenStorage.screens[playLayoutPos].buildScreenPreview(ui.owner)
+        verticalLayout {
+            customize().lparams(width = matchParent, height = matchParent, weight = 1f)
+            linearLayout {
+                button("Play")
+                        .lparams {
+                            width = matchParent
+                            height = wrapContent
+                            this.gravity = Gravity.BOTTOM
+                        }
+                        .onClick {
+                            toast("Play!")
+//                            MainActivity.connection.sendSettings(ScreenStorage.screens[playLayoutPos].commands)
+                            startActivity<PlayActivity>(resources.getString(R.string.play_layout) to playLayoutPos)
+                        }
+            }.lparams(width = matchParent, height = wrapContent)
         }
     }
 }

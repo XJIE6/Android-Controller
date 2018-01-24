@@ -33,9 +33,7 @@ class MenuActivityUI : AnkoComponent<MenuActivity> {
                     isStackFromBottom = false
                     onItemClick { _, _, i, _ ->
                         ui.owner.startActivity(intentFor<SettingsActivity>
-                        (resources.getString(R.string.play_layout) to playAdapter.getItem(i)))
-                        // TODO: потоконебезопасно, eg другой пользователь изменить имя
-
+                        (resources.getString(R.string.play_layout) to i))
                     }
                 }
                 floatingActionButton {

@@ -1,100 +1,81 @@
 package ru.spbau.mit.androidcontroller
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.view.ViewManager
-import org.jetbrains.anko.*
-import org.jetbrains.anko.sdk25.coroutines.onClick
-import android.support.v7.app.AlertDialog
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
+import android.view.ViewManager
 import android.widget.LinearLayout
-import org.jetbrains.anko.custom.style
+import org.jetbrains.anko.*
 
+interface PlayLayout {
+    val ELEMENTS_COUNT: Int
+    val DEFAULT_COMMANDS: Array<String>
 
-object PlayLayouts {
-    private fun addChangeDialog(b: Button, ctx: Context, screenName: String) {
-        val playLayout = commands[screenName]
-        b.onClick {
-            when (ctx) {
-                is SettingsActivity -> {
-                    val editChange = EditText(ctx)
-                    editChange.setText(playLayout?.getCommand(b.id) ?: "")
-                    AlertDialog
-                            .Builder(ctx)
-                            .setTitle("Change command")
-                            .setMessage("Enter the command of the button ${b.text}")
-                            .setView(editChange)
-                            .setNeutralButton("Ok", { _, _ ->
-                                playLayout?.setCommand(b.id, editChange.text.toString())
-                            })
-                            .show()
-
-                }
-                is PlayActivity -> {
-                    ctx.toast(playLayout?.getCommand(b.id) ?: ":(")
-                    MainActivity.connection.sendCommand(b.id)
-                }
-            }
-        }
-    }
-
-    private fun buttonBg(ctx: Context) = GradientDrawable().apply {
+    fun buttonStyle(ctx: Context) = GradientDrawable().apply {
         shape = GradientDrawable.RECTANGLE
         cornerRadius = 6f
         setStroke(2, R.color.playButtons)
         setColor(ctx.getColor(R.color.playButtons))
     }
 
-    var commands: Map<String, PlayLayout> = hashMapOf(
-            Pair("Screen1", PlayLayout("Screen1", arrayOf("H+e+l+o+\\left+l+\\right"))),
-            Pair("Screen2", PlayLayout("Screen2", arrayOf("f+t\\left+\\left+\\left+L+e+\\right+\\right", "R+R+R+r+r+r")))
-    )
-
-    private var layouts: Map<String, (ViewManager.() -> LinearLayout)> = hashMapOf(
-            Pair("Screen1", fun ViewManager.() = linearLayout {
-                    val b1 = button("Push") {
-                        background = buttonBg(context)
-                        id = 0
-                    }.lparams {
-                        height = matchParent
-                        weight = 1f
-                        margin = dip(10)
-                    }
-                    addChangeDialog(b1, context, "Screen1")
-                }
-            ),
-            Pair("Screen2", fun ViewManager.() = linearLayout {
-                    addChangeDialog(button("Left") {
-                        background = buttonBg(context)
-                        id = 0
-                    }.lparams {
-                        width = matchParent
-                        height = matchParent
-                        margin = dip(10)
-                        weight = 1f
-                    }, context, "Screen2")
-                    addChangeDialog(button("Right") {
-                        background = buttonBg(context)
-                        id = 1
-                    }.lparams {
-                        width = matchParent
-                        height = matchParent
-                        margin = dip(10)
-                        weight = 1f
-                    }, context, "Screen2")
-
-                }
-            )
-    )
-
-    fun getKeys(): Array<String> {
-        return layouts.keys.sorted().toTypedArray()
+    fun build(context: Context, lambdas: Array<(View) -> Unit>): ViewManager.() -> LinearLayout
+    fun getElementCount(): Int {
+        return ELEMENTS_COUNT
     }
-
-    fun getLayout(name: String): (ViewManager.() -> LinearLayout)? {
-        return layouts[name]
+    fun getDefaultCommands(): Array<String> {
+        return DEFAULT_COMMANDS
     }
+}
+
+object PlayLayoutOneButton: PlayLayout {
+    override val DEFAULT_COMMANDS = arrayOf("a")
+    override val ELEMENTS_COUNT = 1
+
+    override fun build(context: Context, lambdas: Array<(View) -> Unit>): ViewManager.() -> LinearLayout =
+        fun ViewManager.() = linearLayout {
+            var elementId = 0
+                val b1 = button("Push") {
+                    background = buttonStyle(context)
+                    id = elementId++
+                }.lparams {
+                    height = matchParent
+                    weight = 1f
+                    margin = dip(10)
+                }
+                b1.setOnClickListener(lambdas[elementId - 1])
+        }
+}
+
+object PlayLayoutLeftRight: PlayLayout {
+    override val DEFAULT_COMMANDS = arrayOf("b", "c")
+    override val ELEMENTS_COUNT = 2
+
+    override fun build(context: Context, lambdas: Array<(View) -> Unit>): ViewManager.() -> LinearLayout =
+            fun ViewManager.() = linearLayout {
+                var elementId = 0
+                val b1 = button("Left") {
+                    background = buttonStyle(context)
+                    id = elementId++
+                }.lparams {
+                    width = matchParent
+                    height = matchParent
+                    margin = dip(10)
+                    weight = 1f
+                }
+                b1.setOnClickListener(lambdas[elementId - 1])
+                val b2 = button("Right") {
+                    background = buttonStyle(context)
+                    id = elementId++
+                }.lparams {
+                    width = matchParent
+                    height = matchParent
+                    margin = dip(10)
+                    weight = 1f
+                }
+                b2.setOnClickListener(lambdas[elementId - 1])
+        }
+}
+
+object PlayLayoutStorage {
+    val layouts: ArrayList<PlayLayout> = arrayListOf(PlayLayoutOneButton, PlayLayoutLeftRight)
 }
