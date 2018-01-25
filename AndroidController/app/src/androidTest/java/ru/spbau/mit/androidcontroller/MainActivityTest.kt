@@ -17,6 +17,7 @@ import junit.framework.Assert.assertNotNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import ru.spbau.mit.tools.connection.SocketConnection
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -43,6 +44,7 @@ class MainActivityEspressoTest {
 
     @Test
     fun ensureNextActivity() {
+        MainActivity.connection = ConnectionMock()
         onView(withId(R.id.button_connect)).perform(click())
         intended(IntentMatchers.hasComponent(MenuActivity::class.java.name))
     }

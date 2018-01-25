@@ -19,7 +19,6 @@ import android.support.test.espresso.action.ViewActions.click
 import junit.framework.Assert.assertEquals
 
 
-@LargeTest
 @RunWith(AndroidJUnit4::class)
 class PlayActivityEspressoTest {
 

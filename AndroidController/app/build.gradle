@@ -1,8 +1,23 @@
+
+buildscript {
+    ext.kotlin_version = '1.2.10'
+    repositories {
+        jcenter()
+        maven {
+            url "https://maven.google.com"
+        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-
 
 androidExtensions {
     experimental = true
@@ -39,6 +54,12 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
     }
+
+    testOptions {
+        unitTests.all {
+            jvmArgs '-noverify'
+        }
+    }
 }
 
 ext {
@@ -53,13 +74,15 @@ ext {
 }
 
 dependencies {
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(path: ':tools')
     compile "org.jetbrains.anko:anko:$anko_version"
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestCompile("com.android.support.test.espresso:espresso-core:$espresso_version", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    compile "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     compile "com.jakewharton:butterknife:$butterknife_version"
     kapt "com.jakewharton:butterknife-compiler:$butterknife_version"

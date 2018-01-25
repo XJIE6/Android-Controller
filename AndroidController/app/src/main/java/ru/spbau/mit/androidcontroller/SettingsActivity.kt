@@ -31,7 +31,8 @@ class SettingsActivityUI: AnkoComponent<SettingsActivity> {
                         }
                         .onClick {
                             toast("Play!")
-//                            MainActivity.connection.sendSettings(ScreenStorage.screens[playLayoutPos].commands)
+                            val smth = ScreenStorage.screens[playLayoutPos].commands
+                            MainActivity.connection.sendSettings(smth)
                             startActivity<PlayActivity>(resources.getString(R.string.play_layout) to playLayoutPos)
                         }
             }.lparams(width = matchParent, height = wrapContent)

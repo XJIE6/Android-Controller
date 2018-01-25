@@ -60,6 +60,7 @@ class SettingsActivityEspressoTest {
 
     @Test
     fun ensureNextActivity() {
+        MainActivity.connection = ConnectionMock()
         Espresso.onView(ViewMatchers.withId(R.id.play_button)).perform(click())
         Intents.intended(IntentMatchers.hasComponent(PlayActivity::class.java.name))
     }

@@ -9,12 +9,14 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
-import ru.spbau.mit.tools.SocketConnection
+import ru.spbau.mit.tools.connection.AppConnection
+import ru.spbau.mit.tools.connection.SocketConnection
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
     companion object {
-        val connection: SocketConnection = SocketConnection()
+        var connection: AppConnection = SocketConnection()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,9 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-
         ScreenStorage.saveData(this)
-        val sharedPref = getPreferences(Context.MODE_PRIVATE)
     }
 }
 
