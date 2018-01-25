@@ -37,16 +37,16 @@ class MenuActivityUI : AnkoComponent<MenuActivity> {
                         (resources.getString(R.string.play_layout) to i))
                     }
                 }
-                floatingActionButton {
-                    id = R.id.add_button
-                    imageResource = android.R.drawable.ic_input_add
-                }.lparams {
-                    width = matchParent
-                    height = wrapContent
-                    margin = dip(16)
-                    alignParentBottom()
-                    alignParentRight()
-                }.setOnClickListener { toast("Push!") }
+//                floatingActionButton {
+//                    id = R.id.add_button
+//                    imageResource = android.R.drawable.ic_input_add
+//                }.lparams {
+//                    width = matchParent
+//                    height = wrapContent
+//                    margin = dip(16)
+//                    alignParentBottom()
+//                    alignParentRight()
+//                }.setOnClickListener { toast("Push!") }
             }
         }
     }

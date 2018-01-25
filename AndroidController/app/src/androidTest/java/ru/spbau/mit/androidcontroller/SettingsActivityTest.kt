@@ -46,8 +46,8 @@ class SettingsActivityEspressoTest {
 
     @Test
     fun ensureTextChangesWork() {
+        ScreenStorage.screens[0].commands[0] = ""
         val textToWrite = "Lol"
-        val textToGet = ScreenStorage.screens[0].commands[0] + textToWrite
         Espresso.onView(ViewMatchers.withId(0))
                 .perform(click())
         Espresso.onView(ViewMatchers.withId(R.id.change_command))
@@ -55,7 +55,7 @@ class SettingsActivityEspressoTest {
         Espresso.onView(ViewMatchers.withText(R.string.ok))
                 .perform(click())
 
-        assertEquals(ScreenStorage.screens[0].commands[0], textToGet)
+        assertEquals(ScreenStorage.screens[0].commands[0], textToWrite)
     }
 
     @Test

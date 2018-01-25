@@ -8,8 +8,8 @@ import android.widget.LinearLayout
 import org.jetbrains.anko.*
 
 interface PlayLayout {
-    val ELEMENTS_COUNT: Int
     val DEFAULT_COMMANDS: Array<String>
+    val ELEMENTS_COUNT: Int
 
     fun buttonStyle(ctx: Context) = GradientDrawable().apply {
         shape = GradientDrawable.RECTANGLE
@@ -28,7 +28,7 @@ interface PlayLayout {
 }
 
 object PlayLayoutOneButton: PlayLayout {
-    override val DEFAULT_COMMANDS = arrayOf("+S h -S e l l o P +S w -S o r l d")
+    override val DEFAULT_COMMANDS = arrayOf<String>("+S h -S e l l o P +S w -S o r l d")
     override val ELEMENTS_COUNT = 1
 
     override fun build(context: Context, lambdas: Array<(View) -> Unit>): ViewManager.() -> LinearLayout =
@@ -48,7 +48,7 @@ object PlayLayoutOneButton: PlayLayout {
 }
 
 object PlayLayoutLeftRight: PlayLayout {
-    override val DEFAULT_COMMANDS = arrayOf("+S h -S e l o L l R", "+S h -S e [ l ] 3 B o")
+    override val DEFAULT_COMMANDS = arrayOf<String>("+S h -S e l o L l R", "+S h -S e [ l ] 3 B o")
     override val ELEMENTS_COUNT = 2
 
     override fun build(context: Context, lambdas: Array<(View) -> Unit>): ViewManager.() -> LinearLayout =
@@ -78,6 +78,85 @@ object PlayLayoutLeftRight: PlayLayout {
         }
 }
 
+object PlayLayoutArrows: PlayLayout {
+    override val DEFAULT_COMMANDS = arrayOf("U", "L", "D", "R")
+    override val ELEMENTS_COUNT = 4
+
+    override fun build(context: Context, lambdas: Array<(View) -> Unit>): ViewManager.() -> LinearLayout =
+            fun ViewManager.() = linearLayout {
+                id = R.id.arrows
+                var elementId = 0
+                tableLayout {
+                    tableRow {
+                        textView {  }.lparams {
+                            weight = 1f
+                            width = matchParent
+                            height = matchParent
+                        }
+                        val b1 = button("Up") {
+                            background = PlayLayoutLeftRight.buttonStyle(context)
+                            id = elementId++
+                        }.lparams {
+                            width = matchParent
+                            height = matchParent
+                            weight = 1f
+                        }
+                        b1.setOnClickListener(lambdas[elementId - 1])
+                        textView {  }.lparams {
+                            weight = 1f
+                            width = matchParent
+                            height = matchParent
+                        }
+                    }.lparams {
+                        width = matchParent
+                        height = matchParent
+                        weight = 1f
+                    }
+                    tableRow {
+                        val b2 = button("Left") {
+                            background = PlayLayoutLeftRight.buttonStyle(context)
+                            id = elementId++
+                        }.lparams {
+                            width = matchParent
+                            height = matchParent
+                            weight = 1f
+                        }
+                        b2.setOnClickListener(lambdas[elementId - 1])
+                        val b3 = button("Down") {
+                            background = PlayLayoutLeftRight.buttonStyle(context)
+                            id = elementId++
+                        }.lparams {
+                            width = matchParent
+                            height = matchParent
+                            weight = 1f
+                        }
+                        b3.setOnClickListener(lambdas[elementId - 1])
+                        val b4 = button("Right") {
+                            background = PlayLayoutLeftRight.buttonStyle(context)
+                            id = elementId++
+                        }.lparams {
+                            width = matchParent
+                            height = matchParent
+                            weight = 1f
+                        }.lparams {
+                            width = matchParent
+                            height = matchParent
+                            weight = 1f
+                        }
+                        b4.setOnClickListener(lambdas[elementId - 1])
+                    }.lparams {
+                        width = matchParent
+                        height = matchParent
+                        weight = 1f
+                    }
+                }.lparams {
+                    weight = 1f
+                    width = matchParent
+                    height = matchParent
+                }
+            }
+}
+
 object PlayLayoutStorage {
-    val layouts: ArrayList<PlayLayout> = arrayListOf(PlayLayoutOneButton, PlayLayoutLeftRight)
+    val layouts: ArrayList<PlayLayout> = arrayListOf(PlayLayoutOneButton, PlayLayoutLeftRight, PlayLayoutArrows)
 }

@@ -30,7 +30,6 @@ class SettingsActivityUI: AnkoComponent<SettingsActivity> {
                             this.gravity = Gravity.BOTTOM
                         }
                         .onClick {
-                            toast("Play!")
                             val smth = ScreenStorage.screens[playLayoutPos].commands
                             MainActivity.connection.sendSettings(smth)
                             startActivity<PlayActivity>(resources.getString(R.string.play_layout) to playLayoutPos)

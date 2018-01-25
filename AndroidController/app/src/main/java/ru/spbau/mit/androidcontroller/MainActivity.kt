@@ -11,7 +11,6 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import ru.spbau.mit.tools.connection.AppConnection
 import ru.spbau.mit.tools.connection.SocketConnection
-import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
@@ -50,7 +49,7 @@ class MainActivityUI: AnkoComponent<MainActivity> {
     override fun createView(ui: AnkoContext<MainActivity>) = with(ui) {
         verticalLayout {
             gravity = Gravity.CENTER
-            val form = verticalLayout {
+            verticalLayout {
                 val code = editText {
                     id = R.id.ip_port
                     hintResource = R.string.hint_text
@@ -61,12 +60,16 @@ class MainActivityUI: AnkoComponent<MainActivity> {
                     bottomMargin = dip(10)
                 }
 
-                code.setOnEditorActionListener { v, actionId, event ->
+                code.setOnEditorActionListener { _, actionId, _ ->
                     var handled = false
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
                         hideKeyboard(ui.owner)
-                        toast("Done!")
-                        goToMenu(ui.owner)
+                        val isConnected = MainActivity.connection.connect(code.text.toString())
+                        if (isConnected) {
+                            goToMenu(ui.owner)
+                        } else {
+                            toast("Couldn't connect to server. Check IP and port.")
+                        }
                         handled = true
                     }
                     handled
@@ -76,9 +79,12 @@ class MainActivityUI: AnkoComponent<MainActivity> {
                     textResource = R.string.connect_button
 
                     onClick {
-                        toast("Click!")
-                        MainActivity.connection.connect(code.text.toString())
-                        goToMenu(ui.owner)
+                        val isConnected = MainActivity.connection.connect(code.text.toString())
+                        if (isConnected) {
+                            goToMenu(ui.owner)
+                        } else {
+                            toast("Couldn't connect to server. Check IP and port.")
+                        }
                     }
                 }.lparams(width=matchParent, height=dip(60))
             }.lparams(width=wrapContent)
