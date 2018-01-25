@@ -8,4 +8,5 @@
     <item name="layout_one_button" type="id" />
     <item name="layout_left_right" type="id" />
     <item name="change_command" type="id" />
+    <item name="arrows" type="id" />
 </resources>

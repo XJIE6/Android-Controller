@@ -36,7 +36,7 @@ class Screen(@SerializedName("name") val name: String, @SerializedName("playLayo
     private fun getPlayLambdas(ctx: Context): Array<(View) -> Unit> {
         return Array(commands.size, { num: Int ->
             { view: View ->
-                ctx.toast(commands[num]).show()
+//                ctx.toast(commands[num]).show()
                 MainActivity.connection.sendCommand(num)
             }
         })
@@ -50,7 +50,7 @@ class Screen(@SerializedName("name") val name: String, @SerializedName("playLayo
 
 object ScreenStorage {
     var screens: ArrayList<Screen> = arrayListOf(Screen("Screen1", 0),
-            Screen("Screen2", 1))
+            Screen("Screen2", 1), Screen("Screen3", 2))
 
     fun loadData(ctx: AppCompatActivity) {
         val sharedPref = ctx.getPreferences(Context.MODE_PRIVATE)
