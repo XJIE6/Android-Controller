@@ -28,7 +28,7 @@ interface PlayLayout {
 }
 
 object PlayLayoutOneButton: PlayLayout {
-    override val DEFAULT_COMMANDS = arrayOf("a")
+    override val DEFAULT_COMMANDS = arrayOf("+S h -S e l l o P +S w -S o r l d")
     override val ELEMENTS_COUNT = 1
 
     override fun build(context: Context, lambdas: Array<(View) -> Unit>): ViewManager.() -> LinearLayout =
@@ -48,7 +48,7 @@ object PlayLayoutOneButton: PlayLayout {
 }
 
 object PlayLayoutLeftRight: PlayLayout {
-    override val DEFAULT_COMMANDS = arrayOf("b", "c")
+    override val DEFAULT_COMMANDS = arrayOf("+S h -S e l o L l R", "+S h -S e [ l ] 3 B o")
     override val ELEMENTS_COUNT = 2
 
     override fun build(context: Context, lambdas: Array<(View) -> Unit>): ViewManager.() -> LinearLayout =
