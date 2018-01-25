@@ -29,6 +29,7 @@ class MenuActivityUI : AnkoComponent<MenuActivity> {
             relativeLayout {
                 val playAdapter = MenuAdapter(ui.owner)
                 listView {
+                    id = R.id.menu
                     adapter = playAdapter
                     isStackFromBottom = false
                     onItemClick { _, _, i, _ ->
@@ -37,6 +38,7 @@ class MenuActivityUI : AnkoComponent<MenuActivity> {
                     }
                 }
                 floatingActionButton {
+                    id = R.id.add_button
                     imageResource = android.R.drawable.ic_input_add
                 }.lparams {
                     width = matchParent

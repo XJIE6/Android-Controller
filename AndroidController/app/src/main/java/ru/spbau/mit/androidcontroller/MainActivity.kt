@@ -9,12 +9,14 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
+import ru.spbau.mit.tools.connection.AppConnection
 import ru.spbau.mit.tools.connection.SocketConnection
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
     companion object {
-        val connection = SocketConnection()
+        var connection: AppConnection = SocketConnection()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +51,8 @@ class MainActivityUI: AnkoComponent<MainActivity> {
         verticalLayout {
             gravity = Gravity.CENTER
             val form = verticalLayout {
-                val code = editText() {
+                val code = editText {
+                    id = R.id.ip_port
                     hintResource = R.string.hint_text
                     inputType = InputType.TYPE_CLASS_TEXT
                     singleLine = true
@@ -68,7 +71,8 @@ class MainActivityUI: AnkoComponent<MainActivity> {
                     }
                     handled
                 }
-                button() {
+                button {
+                    id = R.id.button_connect
                     textResource = R.string.connect_button
 
                     onClick {

@@ -55,6 +55,7 @@ class ProtocolTest {
         val handler = TestHandlerBuilder(cmds)
         val server = IPServer(handler)
         server.start()
+
         val connections = Array(cmds.size, {
             val client = SocketConnection()
             assertTrue(client.connect("localhost" + ':' + server.getPort()))
@@ -70,6 +71,7 @@ class ProtocolTest {
         }})
         threads.forEach { it.join() }
         Thread.sleep(1000)
+
         handler.check()
     }
 
