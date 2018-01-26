@@ -29,6 +29,7 @@ class KeyParserTest {
                         Key(77)
                 )))
     }
+
     @Test
     fun syntaxSugarTest() {
         assertEquals(parser.parse("k"), Repeat(1, listOf(Key(75))))

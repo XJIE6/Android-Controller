@@ -11,7 +11,6 @@ import android.widget.LinearLayout
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
-import org.jetbrains.anko.toast
 
 class Screen(@SerializedName("name") val name: String, @SerializedName("playLayoutName") private val playLayoutNum: Int,
              @SerializedName("commands") val commands: Array<String> = PlayLayoutStorage.layouts[playLayoutNum].DEFAULT_COMMANDS) {
@@ -36,7 +35,6 @@ class Screen(@SerializedName("name") val name: String, @SerializedName("playLayo
     private fun getPlayLambdas(ctx: Context): Array<(View) -> Unit> {
         return Array(commands.size, { num: Int ->
             { view: View ->
-//                ctx.toast(commands[num]).show()
                 MainActivity.connection.sendCommand(num)
             }
         })
@@ -44,6 +42,7 @@ class Screen(@SerializedName("name") val name: String, @SerializedName("playLayo
 
     fun buildScreenPreview(ctx: Context): ViewManager.() -> LinearLayout =
             PlayLayoutStorage.layouts[playLayoutNum].build(ctx, getPreviewLambdas(ctx))
+
     fun buildScreenPlay(ctx: Context): ViewManager.() -> LinearLayout =
             PlayLayoutStorage.layouts[playLayoutNum].build(ctx, getPlayLambdas(ctx))
 }

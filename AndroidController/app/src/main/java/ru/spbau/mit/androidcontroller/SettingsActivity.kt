@@ -15,8 +15,8 @@ class SettingsActivity : AppCompatActivity(), AnkoLogger {
     }
 }
 
-class SettingsActivityUI: AnkoComponent<SettingsActivity> {
-    override fun createView(ui: AnkoContext<SettingsActivity>) : View = with(ui) {
+class SettingsActivityUI : AnkoComponent<SettingsActivity> {
+    override fun createView(ui: AnkoContext<SettingsActivity>): View = with(ui) {
         val playLayoutPos = ui.owner.intent.extras.getInt(resources.getString(R.string.play_layout))
         val customize = ScreenStorage.screens[playLayoutPos].buildScreenPreview(ui.owner)
         verticalLayout {

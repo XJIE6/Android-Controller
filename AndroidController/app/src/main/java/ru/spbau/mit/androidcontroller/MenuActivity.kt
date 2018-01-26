@@ -4,7 +4,6 @@ import android.graphics.Color.WHITE
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import org.jetbrains.anko.*
-import org.jetbrains.anko.design.floatingActionButton
 import org.jetbrains.anko.design.themedAppBarLayout
 import org.jetbrains.anko.sdk25.coroutines.onItemClick
 
@@ -37,16 +36,6 @@ class MenuActivityUI : AnkoComponent<MenuActivity> {
                         (resources.getString(R.string.play_layout) to i))
                     }
                 }
-//                floatingActionButton {
-//                    id = R.id.add_button
-//                    imageResource = android.R.drawable.ic_input_add
-//                }.lparams {
-//                    width = matchParent
-//                    height = wrapContent
-//                    margin = dip(16)
-//                    alignParentBottom()
-//                    alignParentRight()
-//                }.setOnClickListener { toast("Push!") }
             }
         }
     }

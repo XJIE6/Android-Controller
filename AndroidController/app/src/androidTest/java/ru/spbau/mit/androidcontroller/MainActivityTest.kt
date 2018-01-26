@@ -17,13 +17,13 @@ import junit.framework.Assert.assertNotNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import ru.spbau.mit.tools.connection.SocketConnection
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class MainActivityEspressoTest {
 
-    @Rule @JvmField
+    @Rule
+    @JvmField
     var mActivityRule = IntentsTestRule(MainActivity::class.java)
 
     @Test

@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class MainActivityUI: AnkoComponent<MainActivity> {
+class MainActivityUI : AnkoComponent<MainActivity> {
 
     private fun goToMenu(activity: MainActivity) {
         activity.startActivity<MenuActivity>()
@@ -86,8 +86,8 @@ class MainActivityUI: AnkoComponent<MainActivity> {
                             toast("Couldn't connect to server. Check IP and port.")
                         }
                     }
-                }.lparams(width=matchParent, height=dip(60))
-            }.lparams(width=wrapContent)
+                }.lparams(width = matchParent, height = dip(60))
+            }.lparams(width = wrapContent)
         }
     }
 }

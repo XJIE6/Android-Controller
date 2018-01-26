@@ -6,26 +6,25 @@ import java.net.Socket
 import java.net.SocketTimeoutException
 import kotlin.concurrent.thread
 
-class IPServer(private val factory : () -> Handler) {
+class IPServer(private val factory: () -> Handler) {
     private val server = ServerSocket(0)
     private var isOpen = true
 
-    fun getPort() : Int {
+    fun getPort(): Int {
         return server.localPort
     }
 
     fun start() {
-        thread (isDaemon = true) {
+        thread(isDaemon = true) {
             server.soTimeout = 100000 // Timeout for accepting
             while (isOpen) {
                 try {
                     val connection = server.accept()
-                    thread (isDaemon = true) {
+                    thread(isDaemon = true) {
                         println("connected")
                         IPConnection(connection, factory.invoke()).start()
                     }
-                }
-                catch (e : SocketTimeoutException) {
+                } catch (e: SocketTimeoutException) {
                     continue
                 }
 
@@ -38,7 +37,7 @@ class IPServer(private val factory : () -> Handler) {
     }
 }
 
-class IPConnection(private val socket : Socket, private val handler : Handler) {
+class IPConnection(private val socket: Socket, private val handler: Handler) {
 
     private val input = DataInputStream(socket.getInputStream())
 
@@ -54,8 +53,7 @@ class IPConnection(private val socket : Socket, private val handler : Handler) {
                 }
                 msg = input.readInt()
             }
-        }
-        catch (e : Exception) {
+        } catch (e: Exception) {
         }
         handler.onClose()
         if (!socket.isClosed) {
