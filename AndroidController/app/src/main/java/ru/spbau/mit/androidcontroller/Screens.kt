@@ -32,9 +32,9 @@ class Screen(@SerializedName("name") val name: String, @SerializedName("playLayo
         })
     }
 
-    private fun getPlayLambdas(ctx: Context): Array<(View) -> Unit> {
+    private fun getPlayLambdas(): Array<(View) -> Unit> {
         return Array(commands.size, { num: Int ->
-            { view: View ->
+            { _: View ->
                 MainActivity.connection.sendCommand(num)
             }
         })
@@ -44,7 +44,7 @@ class Screen(@SerializedName("name") val name: String, @SerializedName("playLayo
             PlayLayoutStorage.layouts[playLayoutNum].build(ctx, getPreviewLambdas(ctx))
 
     fun buildScreenPlay(ctx: Context): ViewManager.() -> LinearLayout =
-            PlayLayoutStorage.layouts[playLayoutNum].build(ctx, getPlayLambdas(ctx))
+            PlayLayoutStorage.layouts[playLayoutNum].build(ctx, getPlayLambdas())
 }
 
 object ScreenStorage {

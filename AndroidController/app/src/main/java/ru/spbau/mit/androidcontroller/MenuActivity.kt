@@ -26,7 +26,7 @@ class MenuActivityUI : AnkoComponent<MenuActivity> {
                 }
             }
             relativeLayout {
-                val playAdapter = MenuAdapter(ui.owner)
+                val playAdapter = MenuAdapter()
                 listView {
                     id = R.id.menu
                     adapter = playAdapter

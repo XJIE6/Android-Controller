@@ -9,4 +9,5 @@
     <item name="layout_left_right" type="id" />
     <item name="change_command" type="id" />
     <item name="arrows" type="id" />
+    <item name="main_layout" type="id" />
 </resources>

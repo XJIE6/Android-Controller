@@ -6,7 +6,7 @@ import android.widget.BaseAdapter
 import org.jetbrains.anko.relativeLayout
 import org.jetbrains.anko.textView
 
-class MenuAdapter(activity: MenuActivity) : BaseAdapter() {
+class MenuAdapter() : BaseAdapter() {
     var array: Array<String> = ScreenStorage.getNames()
 
     override fun getView(i: Int, v: View?, parent: ViewGroup?): View {

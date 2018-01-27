@@ -15,6 +15,7 @@ class IPServer(private val factory: () -> Handler) {
     }
 
     fun start() {
+
         thread(isDaemon = true) {
             server.soTimeout = 100000 // Timeout for accepting
             while (isOpen) {
@@ -53,11 +54,11 @@ class IPConnection(private val socket: Socket, private val handler: Handler) {
                 }
                 msg = input.readInt()
             }
-        } catch (e: Exception) {
-        }
-        handler.onClose()
-        if (!socket.isClosed) {
-            socket.close()
+        } finally {
+            handler.onClose()
+            if (!socket.isClosed) {
+                socket.close()
+            }
         }
     }
 }

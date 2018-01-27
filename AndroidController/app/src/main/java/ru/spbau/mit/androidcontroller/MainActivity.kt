@@ -4,10 +4,16 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.InputType
+import android.text.Layout
 import android.view.Gravity
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.LinearLayout
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.*
+import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import ru.spbau.mit.tools.connection.AppConnection
 import ru.spbau.mit.tools.connection.SocketConnection
@@ -46,8 +52,26 @@ class MainActivityUI : AnkoComponent<MainActivity> {
         imm.hideSoftInputFromWindow(activity.currentFocus!!.windowToken, 0)
     }
 
+    private fun enableAll(elements: List<View>, enabled: Boolean) {
+        elements.forEach({it.isEnabled = enabled})
+    }
+
+    private fun tryToConnect(code: String, activity: MainActivity, elements: List<View>) {
+        async(UI) {
+            enableAll(elements, false)
+            val isConnected = bg { MainActivity.connection.connect(code) }.await()
+            enableAll(elements, true)
+            if (isConnected) {
+                goToMenu(activity)
+            } else {
+                activity.toast("Couldn't connect to server. Check IP and port.")
+            }
+        }
+    }
+
     override fun createView(ui: AnkoContext<MainActivity>) = with(ui) {
         verticalLayout {
+            id = R.id.main_layout
             gravity = Gravity.CENTER
             verticalLayout {
                 val code = editText {
@@ -60,33 +84,27 @@ class MainActivityUI : AnkoComponent<MainActivity> {
                     bottomMargin = dip(10)
                 }
 
+                val connectButton = button {
+                    id = R.id.button_connect
+                    textResource = R.string.connect_button
+
+                }.lparams(width = matchParent, height = dip(60))
+
+                connectButton.onClick {
+                    tryToConnect(code.text.toString(), ui.owner, arrayListOf<View>(connectButton, code))
+                }
+
+
                 code.setOnEditorActionListener { _, actionId, _ ->
                     var handled = false
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
                         hideKeyboard(ui.owner)
-                        val isConnected = MainActivity.connection.connect(code.text.toString())
-                        if (isConnected) {
-                            goToMenu(ui.owner)
-                        } else {
-                            toast("Couldn't connect to server. Check IP and port.")
-                        }
+                        tryToConnect(code.text.toString(), ui.owner, arrayListOf<View>(connectButton, code))
                         handled = true
                     }
                     handled
                 }
-                button {
-                    id = R.id.button_connect
-                    textResource = R.string.connect_button
 
-                    onClick {
-                        val isConnected = MainActivity.connection.connect(code.text.toString())
-                        if (isConnected) {
-                            goToMenu(ui.owner)
-                        } else {
-                            toast("Couldn't connect to server. Check IP and port.")
-                        }
-                    }
-                }.lparams(width = matchParent, height = dip(60))
             }.lparams(width = wrapContent)
         }
     }
