@@ -1,6 +1,8 @@
 package ru.spbau.mit.tools.connection
 
+import java.io.BufferedReader
 import java.io.DataInputStream
+import java.io.InputStreamReader
 import java.net.ServerSocket
 import java.net.Socket
 import java.net.SocketTimeoutException
@@ -40,19 +42,19 @@ class IPServer(private val factory : () -> Handler) {
 
 class IPConnection(private val socket : Socket, private val handler : Handler) {
 
-    private val input = DataInputStream(socket.getInputStream())
+    private val input = BufferedReader(InputStreamReader(socket.getInputStream()))
 
     fun start() {
-        var msg = input.readInt()
+        var msg = input.readLine()
         try {
             while (msg != Protocol.END_CONNECTION) {
                 if (msg == Protocol.START_SETTINGS) {
-                    val n = input.readInt()
-                    handler.onSetting(Array(n, { _ -> input.readUTF() }))
+                    val n = input.readLine()
+                    handler.onSetting(Array(n.toInt(), { _ -> input.readLine() }))
                 } else {
-                    handler.onClick(msg)
+                    handler.onClick(msg.toInt())
                 }
-                msg = input.readInt()
+                msg = input.readLine()
             }
         }
         catch (e : Exception) {

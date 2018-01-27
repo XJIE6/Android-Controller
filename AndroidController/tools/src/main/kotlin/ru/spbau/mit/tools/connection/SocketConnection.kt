@@ -1,7 +1,9 @@
 package ru.spbau.mit.tools.connection
 
 
+import java.io.BufferedWriter
 import java.io.DataOutputStream
+import java.io.OutputStreamWriter
 import java.net.InetSocketAddress
 import java.net.Socket
 import kotlin.concurrent.thread
@@ -9,7 +11,7 @@ import kotlin.concurrent.thread
 class SocketConnection : AppConnection {
 
     private val socket = Socket()
-    private lateinit var out : DataOutputStream
+    private lateinit var out : BufferedWriter
 
     override fun connect(params : String) : Boolean {
         val thread = thread {
@@ -18,7 +20,7 @@ class SocketConnection : AppConnection {
         }
         thread.join()
         if (socket.isConnected) {
-            out = DataOutputStream(socket.getOutputStream())
+            out = BufferedWriter(OutputStreamWriter(socket.getOutputStream()))
             return true
         }
         return false
@@ -26,9 +28,9 @@ class SocketConnection : AppConnection {
 
     override fun sendSettings(settingList: Array<String>) {
         val thread = thread {
-            out.writeInt(Protocol.START_SETTINGS)
-            out.writeInt(settingList.size)
-            settingList.forEach { out.writeUTF(it) }
+            out.write(Protocol.START_SETTINGS)
+            out.write(settingList.size.toString())
+            settingList.forEach { out.write(it) }
             out.flush()
         }
         thread.join()
@@ -36,7 +38,7 @@ class SocketConnection : AppConnection {
 
     override fun sendCommand(command: Int) {
         val thread = thread {
-            out.writeInt(command)
+            out.write(command)
             out.flush()
         }
         thread.join()
@@ -45,7 +47,7 @@ class SocketConnection : AppConnection {
     override fun close() {
         val thread = thread {
             if (socket.isConnected) {
-                out.writeInt(Protocol.END_CONNECTION)
+                out.write(Protocol.END_CONNECTION)
                 out.flush()
             }
         }
