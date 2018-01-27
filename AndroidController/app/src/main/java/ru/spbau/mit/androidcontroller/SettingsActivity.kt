@@ -6,11 +6,15 @@ import android.view.Gravity
 import android.view.View
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
+import ru.spbau.mit.tools.connection.AppConnection
 
 class SettingsActivity : AppCompatActivity(), AnkoLogger {
+    lateinit var connection: AppConnection
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val app = applicationContext as MyApplication
+        connection = app.connection
         SettingsActivityUI().setContentView(this)
     }
 }
@@ -31,7 +35,7 @@ class SettingsActivityUI : AnkoComponent<SettingsActivity> {
                         }
                         .onClick {
                             val smth = ScreenStorage.screens[playLayoutPos].commands
-                            MainActivity.connection.sendSettings(smth)
+                            ui.owner.connection.sendSettings(smth)
                             startActivity<PlayActivity>(resources.getString(R.string.play_layout) to playLayoutPos)
                         }
             }.lparams(width = matchParent, height = wrapContent)

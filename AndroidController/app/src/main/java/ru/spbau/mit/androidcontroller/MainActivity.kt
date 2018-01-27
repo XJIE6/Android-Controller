@@ -4,28 +4,25 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.InputType
-import android.text.Layout
 import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.LinearLayout
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.*
 import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import ru.spbau.mit.tools.connection.AppConnection
-import ru.spbau.mit.tools.connection.SocketConnection
 
 
 class MainActivity : AppCompatActivity() {
-    companion object {
-        var connection: AppConnection = SocketConnection()
-    }
+    lateinit var connection: AppConnection
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val app = applicationContext as MyApplication
+        connection = app.connection
         ScreenStorage.loadData(this)
         MainActivityUI().setContentView(this)
     }
@@ -59,7 +56,7 @@ class MainActivityUI : AnkoComponent<MainActivity> {
     private fun tryToConnect(code: String, activity: MainActivity, elements: List<View>) {
         async(UI) {
             enableAll(elements, false)
-            val isConnected = bg { MainActivity.connection.connect(code) }.await()
+            val isConnected = bg { activity.connection.connect(code) }.await()
             enableAll(elements, true)
             if (isConnected) {
                 goToMenu(activity)

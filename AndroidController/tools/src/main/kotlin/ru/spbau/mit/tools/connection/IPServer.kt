@@ -1,6 +1,7 @@
 package ru.spbau.mit.tools.connection
 
 import java.io.DataInputStream
+import java.io.EOFException
 import java.net.ServerSocket
 import java.net.Socket
 import java.net.SocketTimeoutException
@@ -54,7 +55,10 @@ class IPConnection(private val socket: Socket, private val handler: Handler) {
                 }
                 msg = input.readInt()
             }
-        } finally {
+        } catch (e: EOFException) {
+            print("Connection is lost")
+        }
+        finally {
             handler.onClose()
             if (!socket.isClosed) {
                 socket.close()

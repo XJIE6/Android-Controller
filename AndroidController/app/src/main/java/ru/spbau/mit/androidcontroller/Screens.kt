@@ -1,6 +1,7 @@
 package ru.spbau.mit.androidcontroller
 
 import android.app.AlertDialog
+import android.app.Application
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -32,10 +33,11 @@ class Screen(@SerializedName("name") val name: String, @SerializedName("playLayo
         })
     }
 
-    private fun getPlayLambdas(): Array<(View) -> Unit> {
+    private fun getPlayLambdas(applicationContext: Context): Array<(View) -> Unit> {
         return Array(commands.size, { num: Int ->
             { _: View ->
-                MainActivity.connection.sendCommand(num)
+                val app = applicationContext as MyApplication
+                app.connection.sendCommand(num)
             }
         })
     }
@@ -43,8 +45,8 @@ class Screen(@SerializedName("name") val name: String, @SerializedName("playLayo
     fun buildScreenPreview(ctx: Context): ViewManager.() -> LinearLayout =
             PlayLayoutStorage.layouts[playLayoutNum].build(ctx, getPreviewLambdas(ctx))
 
-    fun buildScreenPlay(ctx: Context): ViewManager.() -> LinearLayout =
-            PlayLayoutStorage.layouts[playLayoutNum].build(ctx, getPlayLambdas())
+    fun buildScreenPlay(ctx: Context, applicationContext: Context): ViewManager.() -> LinearLayout =
+            PlayLayoutStorage.layouts[playLayoutNum].build(ctx, getPlayLambdas(applicationContext))
 }
 
 object ScreenStorage {

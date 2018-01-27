@@ -19,7 +19,7 @@ class PlayActivity : AppCompatActivity() {
 class PlayActivityUI : AnkoComponent<PlayActivity> {
     override fun createView(ui: AnkoContext<PlayActivity>): LinearLayout = with(ui) {
         val playLayoutPos = ui.owner.intent.extras.getInt(resources.getString(R.string.play_layout))
-        val customize = ScreenStorage.screens[playLayoutPos].buildScreenPlay(ui.owner)
+        val customize = ScreenStorage.screens[playLayoutPos].buildScreenPlay(ui.owner, ui.owner.applicationContext)
         customize()
     }
 }
