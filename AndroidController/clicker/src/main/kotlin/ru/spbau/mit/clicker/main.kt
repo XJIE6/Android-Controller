@@ -5,6 +5,7 @@ import ru.spbau.mit.tools.connection.IPServer
 import ru.spbau.mit.tools.lang.*
 import java.awt.Robot
 import java.net.NetworkInterface
+import java.text.ParseException
 
 fun getAddress(): String {
     return NetworkInterface.getNetworkInterfaces().toList()
@@ -36,6 +37,14 @@ fun main(args: Array<String>) {
             }
 
             override fun onSetting(arr: Array<String>) {
+                arr.forEach {
+                    try {
+                        parser.parse(it)
+                    } catch (e: ParseException) {
+                        println("Wrong command: $it")
+                        return
+                    }
+                }
                 array = arr.map { it -> { eval(parser.parse(it)) } }.toTypedArray()
             }
 
@@ -49,8 +58,8 @@ fun main(args: Array<String>) {
             }
         }
     })
+    server.init(getAddress())
     println(getAddress() + ':' + server.getPort())
     server.start()
     readLine()
-    server.stop()
 }

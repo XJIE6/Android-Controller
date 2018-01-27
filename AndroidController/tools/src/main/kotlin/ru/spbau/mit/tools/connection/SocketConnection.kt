@@ -1,7 +1,8 @@
 package ru.spbau.mit.tools.connection
 
 
-import java.io.DataOutputStream
+import java.io.BufferedWriter
+import java.io.OutputStreamWriter
 import java.net.InetSocketAddress
 import java.net.Socket
 import java.util.concurrent.Executors
@@ -10,16 +11,21 @@ import java.util.concurrent.TimeUnit
 class SocketConnection : AppConnection {
 
     private val socket = Socket()
-    private lateinit var out: DataOutputStream
+    private lateinit var out: BufferedWriter
     private val threadPool = Executors.newSingleThreadExecutor()
     override fun connect(params: String): Boolean {
         threadPool.submit {
             val ipPort = params.split(":")
-            socket.connect(InetSocketAddress(ipPort[0], ipPort[1].toInt()))
+            try {
+                socket.connect(InetSocketAddress(ipPort[0], ipPort[1].toInt()))
+            } catch (e: Exception) {
+                print(e.toString())
+            }
+            val a = ipPort
         }
         threadPool.awaitTermination(1, TimeUnit.SECONDS)
         if (socket.isConnected) {
-            out = DataOutputStream(socket.getOutputStream())
+            out = BufferedWriter(OutputStreamWriter(socket.getOutputStream()))
             return true
         }
         return false
@@ -27,16 +33,16 @@ class SocketConnection : AppConnection {
 
     override fun sendSettings(settingList: Array<String>) {
         threadPool.submit {
-            out.writeInt(Protocol.START_SETTINGS)
-            out.writeInt(settingList.size)
-            settingList.forEach { out.writeUTF(it) }
+            out.write(Protocol.START_SETTINGS.toString() + '\n')
+            out.write(settingList.size.toString() + '\n')
+            settingList.forEach { out.write(it + '\n') }
             out.flush()
         }
     }
 
     override fun sendCommand(command: Int) {
         threadPool.submit {
-            out.writeInt(command)
+            out.write(command.toString() + '\n')
             out.flush()
         }
     }
@@ -44,9 +50,10 @@ class SocketConnection : AppConnection {
     override fun close() {
         threadPool.submit {
             if (socket.isConnected) {
-                out.writeInt(Protocol.END_CONNECTION)
+                out.write(Protocol.END_CONNECTION.toString() + '\n')
                 out.flush()
             }
         }
+        threadPool.awaitTermination(1, TimeUnit.SECONDS)
     }
 }

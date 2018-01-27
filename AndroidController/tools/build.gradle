@@ -1,12 +1,20 @@
 apply plugin: 'kotlin'
 
 repositories {
-    maven {     url 'http://dl.bintray.com/kotlin/kotlin-eap-1.2' }
+    maven {     url 'http://dl.bintray.com/kotlin/kotlin-eap-1.2'}
     mavenCentral()
     jcenter()
 }
 
+ext{
+    kor_version = "0.20.0"
+}
+
+kotlin { experimental { coroutines 'enable' } }
+
 dependencies {
+    compile "com.soywiz:korio:$kor_version"
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile 'com.github.h0tk3y.betterParse:better-parse:0.3.2'
     testCompile 'junit:junit:4.12'

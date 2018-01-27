@@ -1,66 +1,60 @@
 package ru.spbau.mit.tools.connection
 
-import java.io.DataInputStream
+import com.soywiz.korio.async.EventLoop
+import com.soywiz.korio.async.spawn
+import com.soywiz.korio.net.AsyncClient
+import com.soywiz.korio.net.AsyncServer
+import com.soywiz.korio.net.asyncSocketFactory
+import com.soywiz.korio.stream.readLine
+import kotlinx.coroutines.experimental.launch
 import java.io.EOFException
-import java.net.ServerSocket
-import java.net.Socket
-import java.net.SocketTimeoutException
-import kotlin.concurrent.thread
 
 class IPServer(private val factory: () -> Handler) {
-    private val server = ServerSocket(0)
+    private lateinit var server: AsyncServer
     private var isOpen = true
 
     fun getPort(): Int {
-        return server.localPort
+        return server.port
     }
 
-    fun start() {
+    fun init(address: String) = EventLoop.invoke {
+        server = asyncSocketFactory.createServer(0, address)
+    }
 
-        thread(isDaemon = true) {
-            server.soTimeout = 100000 // Timeout for accepting
-            while (isOpen) {
-                try {
-                    val connection = server.accept()
-                    thread(isDaemon = true) {
-                        println("connected")
-                        IPConnection(connection, factory.invoke()).start()
+    fun start() = launch {
+        EventLoop.invoke {
+            while (true) {
+                for (me in server.listen()) {
+                    spawn(coroutineContext) {
+                        IPConnection(me, factory()).start()
                     }
-                } catch (e: SocketTimeoutException) {
-                    continue
                 }
-
             }
         }
     }
 
-    fun stop() {
-        isOpen = false
-    }
 }
 
-class IPConnection(private val socket: Socket, private val handler: Handler) {
+class IPConnection(private val socket: AsyncClient, private val handler: Handler) {
 
-    private val input = DataInputStream(socket.getInputStream())
-
-    fun start() {
-        var msg = input.readInt()
+    suspend fun start() {
+        println("connected")
+        var msg = socket.readLine().toInt()
         try {
             while (msg != Protocol.END_CONNECTION) {
                 if (msg == Protocol.START_SETTINGS) {
-                    val n = input.readInt()
-                    handler.onSetting(Array(n, { _ -> input.readUTF() }))
+                    val n = socket.readLine().toInt()
+                    handler.onSetting(Array(n, { _ -> socket.readLine() }))
                 } else {
                     handler.onClick(msg)
                 }
-                msg = input.readInt()
+                msg = socket.readLine().toInt()
             }
         } catch (e: EOFException) {
             print("Connection is lost")
-        }
-        finally {
+        } finally {
             handler.onClose()
-            if (!socket.isClosed) {
+            if (socket.connected) {
                 socket.close()
             }
         }

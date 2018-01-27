@@ -1,7 +1,6 @@
 package ru.spbau.mit.androidcontroller
 
 import android.app.AlertDialog
-import android.app.Application
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.view.View

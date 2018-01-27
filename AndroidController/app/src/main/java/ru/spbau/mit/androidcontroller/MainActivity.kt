@@ -9,7 +9,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.*
 import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.sdk25.coroutines.onClick
@@ -50,11 +50,11 @@ class MainActivityUI : AnkoComponent<MainActivity> {
     }
 
     private fun enableAll(elements: List<View>, enabled: Boolean) {
-        elements.forEach({it.isEnabled = enabled})
+        elements.forEach({ it.isEnabled = enabled })
     }
 
     private fun tryToConnect(code: String, activity: MainActivity, elements: List<View>) {
-        async(UI) {
+        launch(UI) {
             enableAll(elements, false)
             val isConnected = bg { activity.connection.connect(code) }.await()
             enableAll(elements, true)

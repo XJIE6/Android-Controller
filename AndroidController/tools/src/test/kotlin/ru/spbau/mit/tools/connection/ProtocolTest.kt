@@ -56,13 +56,13 @@ class ProtocolTest {
     fun test(cmds: Array<Array<Command>>) {
         val handler = TestHandlerBuilder(cmds)
         val server = IPServer(handler)
-        server.start()
-
-        val connections = Array(cmds.size, {
-            val client = SocketConnection()
-            assertTrue(client.connect("localhost" + ':' + server.getPort()))
-            client
-        })
+        thread {
+            server.start()
+        }
+        val connections = Array(cmds.size, { SocketConnection() })
+        Thread.sleep(1000)
+        connections.forEach { assertTrue(it.connect("localhost" + ':' + server.getPort())) }
+        Thread.sleep(1000)
         val threads = Array(cmds.size, { index ->
             thread {
                 val client = connections[index]
@@ -76,7 +76,7 @@ class ProtocolTest {
             }
         })
         threads.forEach { it.join() }
-        Thread.sleep(1000)
+        Thread.sleep(10000)
 
         handler.check()
     }
